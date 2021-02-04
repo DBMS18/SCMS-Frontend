@@ -1,8 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
+import Contact from './pages/Contact';
+import { ChakraProvider } from '@chakra-ui/react';
 
 function App() {
   return (
+    <ChakraProvider>
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -18,7 +21,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <Contact />
     </div>
+    </ChakraProvider>
   );
 }
 
