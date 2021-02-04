@@ -1,5 +1,5 @@
 import { Component } from 'react'
 
-class Login extends Component{
+class Signin extends Component{
     
 }
