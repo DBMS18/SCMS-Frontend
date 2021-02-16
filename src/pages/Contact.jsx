@@ -49,6 +49,14 @@ const Contact = ()=>{
         </Container>
 
       </ChakraProvider>
+<<<<<<< HEAD
+
+
+    )
+  }
+
+  export default Contact;
+=======
         
       
     )
@@ -56,3 +64,4 @@ const Contact = ()=>{
 
   export default Contact;
   
+>>>>>>> c808926c7ca893765832ab09a7ee7ff34cf531be
