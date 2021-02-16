@@ -1,6 +1,8 @@
 
 import { Container,Input,InputGroup,InputLeftElement,Stack} from "@chakra-ui/react";
+
 import { Heading,Text } from "@chakra-ui/react";
+
 import {ArrowRightIcon,EmailIcon} from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import React, { Component } from 'react';
@@ -82,25 +84,31 @@ class Signin extends Component{
                             pointerEvents="none"
                             children={<EmailIcon color="gray.300" />}
                         />
+
                         <Input placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]} />
                     </InputGroup>
                     <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
+
                     <InputGroup>
                         <InputLeftElement
                             pointerEvents="none"
                             children={<RiLock2Line color="gray.300" />}
                         />
+
                         <Input type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
                     </InputGroup>
                     <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
 
                     <Button type="submit"className="button"  value="Register" rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
+
                         Sign in
                     </Button>
                 </Stack>
             </Container>
+
             </form>
             </div>
+
         )
     }
 }

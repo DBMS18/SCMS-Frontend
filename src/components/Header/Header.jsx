@@ -99,7 +99,7 @@ class Header extends Component{
                     <MenuItem to="/store">Store </MenuItem>
                     <MenuItem to="/about">About </MenuItem>
                     <MenuItem to="/contact">Contact </MenuItem>
-                    {this.state.user=="guest" ? <div></div> : <MenuItem to="/cart">
+                    {this.state.user==="guest" ? <div></div> : <MenuItem to="/cart">
                     <Button
                         size="sm"
                         fontSize="xl"

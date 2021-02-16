@@ -1,6 +1,7 @@
 
-import { Container,Input,InputGroup,InputLeftElement,Stack, HStack} from "@chakra-ui/react";
+
 import { Heading,Text } from "@chakra-ui/react";
+
 import {ArrowRightIcon,ViewIcon,EmailIcon} from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import React, { Component } from 'react';
@@ -11,6 +12,7 @@ import { RiLock2Line } from "react-icons/ri";
 
 
 class Signup extends Component{
+
 
     constructor(props){
         super(props);
@@ -113,6 +115,7 @@ class Signup extends Component{
         return(
             <div>           
              <form name="signupform" className="signupform" onSubmit= {this.signUp.bind(this)}>
+
             <Container bg="white" w="80%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="14" marginBottom="14" borderRadius="lg">
                 <Heading margin="10">Create Account</Heading>
                 <Heading margin="10" fontSize="2xl">Personal Information</Heading>
@@ -123,18 +126,22 @@ class Signup extends Component{
                                 pointerEvents="none"
                                 children={<ViewIcon color="gray.300" />}
                             />
+
                             <Input  type="text" placeholder="First name" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "firstname")} value={this.state.fields["firstname"]} />
                         </InputGroup>
                         <Text style={{color: "red"}}>{this.state.errors["firstname"]}</Text>
+
         
                         <InputGroup>
                             <InputLeftElement
                                 pointerEvents="none"
                                 children={<ViewIcon color="gray.300" />}
                             />
+
                             <Input type="text" placeholder="Last Name"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "lastname")} value={this.state.fields["lastname"]} />
                         </InputGroup>
                         <Text style={{color: "red"}}>{this.state.errors["lastname"]}</Text>
+
                     </HStack>
     
                     <InputGroup>
@@ -142,9 +149,11 @@ class Signup extends Component{
                             pointerEvents="none"
                             children={<AiFillIdcard color="gray.300" />}
                         />
+
                         <Input type="NIC" placeholder="NIC number" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "nic")} value={this.state.fields["nic"]} />
                     </InputGroup>
                     <Text style={{color: "red"}}>{this.state.errors["nic"]}</Text>
+
                 </Stack>
                 <Heading margin="10" fontSize="2xl">Account Security</Heading>
                 <Stack spacing={5}>
@@ -153,25 +162,31 @@ class Signup extends Component{
                             pointerEvents="none"
                             children={<EmailIcon color="gray.300" />}
                         />
+
                         <Input  placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]}/>
                     </InputGroup>
                     <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
+
                     <InputGroup>
                         <InputLeftElement
                             pointerEvents="none"
                             children={<RiLock2Line color="gray.300" />}
                         />
+
                         <Input type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
                     </InputGroup>
                     <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
 
                     <Button type="submit"className="button"  value="Register"  rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
+
                         Create Account
                     </Button>
                 </Stack>
             </Container>
+
             </form>
             </div>
+
         )
     }
 }

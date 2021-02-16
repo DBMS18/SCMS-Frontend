@@ -123,7 +123,6 @@ class Contact extends React.Component {
         </Container>
 
       </ChakraProvider>
-    
             </form>
           </div>
     )
