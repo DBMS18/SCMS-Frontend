@@ -10,8 +10,7 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
         display="block"
         {...rest}
       >
-        {/* <Link to={to}>{children}</Link> */}
-        {children}
+        <Link to={to}>{children}</Link>
       </Text>
     );
   };
