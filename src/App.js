@@ -1,19 +1,28 @@
 import './App.css';
+import Contact from './pages/Contact';
 import { ChakraProvider } from '@chakra-ui/react';
-import Main from './pages/Main';
-import customTheme from './utils/theme';
-import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <BrowserRouter>
-      <ChakraProvider theme={customTheme}>
-        <div className="App">
-          <Main />
-        </div>
-      </ChakraProvider>
-    </BrowserRouter>
-    
+    <ChakraProvider>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+      <Contact />
+    </div>
+    </ChakraProvider>
   );
 }
 
