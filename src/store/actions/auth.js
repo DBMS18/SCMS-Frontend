@@ -1,4 +1,3 @@
-import ajax from '../../utils/ajax';
 
 import * as actionTypes from './actionTypes';
 

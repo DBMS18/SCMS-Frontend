@@ -1,7 +1,7 @@
 
 
 import { Heading,Text } from "@chakra-ui/react";
-
+import { Container,Input,InputGroup,InputLeftElement,HStack, Stack} from "@chakra-ui/react";
 import {ArrowRightIcon,ViewIcon,EmailIcon} from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import React, { Component } from 'react';
@@ -18,7 +18,13 @@ class Signup extends Component{
         super(props);
    
         this.state = {
-            fields: {},
+            fields: {
+                firstname:'',
+                lastname:'',
+                nic:'',
+                email:'',
+                pwrd:'',
+            },
             errors: {}
         }
      }
@@ -91,7 +97,10 @@ class Signup extends Component{
             }
           }
       
-        this.setState({errors: errors});
+          this.setState({
+            ...this.state,
+            errors: errors,
+          });
         return formIsValid;
     }
      
@@ -108,7 +117,10 @@ class Signup extends Component{
      handleChange(field, e){         
          let fields = this.state.fields;
          fields[field] = e.target.value;        
-         this.setState({fields});
+         this.setState({
+            ...this.state,
+            fields
+          });
      }
    
     render(){

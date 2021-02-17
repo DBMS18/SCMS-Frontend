@@ -17,8 +17,14 @@ class Signin extends Component{
         super(props);
    
         this.state = {
-            fields: {},
-            errors: {}
+            fields: {
+              pwrd:'',
+              email:''
+            },
+            errors: {
+              pwrd:'',
+              email:''
+            }
         }
      }
    
@@ -54,7 +60,10 @@ class Signin extends Component{
          //function for check password is correct
         
    
-        this.setState({errors: errors});
+        this.setState({
+          ...this.state,
+          errors: errors,
+        });
         return formIsValid;
     }
      
@@ -70,8 +79,12 @@ class Signin extends Component{
      handleChange(field, e){         
          let fields = this.state.fields;
          fields[field] = e.target.value;        
-         this.setState({fields});
+         this.setState({
+           ...this.state,
+           fields
+         });
      }
+     
     render(){
         return(
             <div>           

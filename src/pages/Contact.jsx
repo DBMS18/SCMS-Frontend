@@ -12,8 +12,18 @@ class Contact extends React.Component {
      super(props);
 
      this.state = {
-         fields: {},
-         errors: {}
+         fields: {
+            name:'',
+            email:'',
+            contact:'',
+            msg:'',
+         },
+         errors: {
+            name:'',
+            email:'',
+            contact:'',
+            msg:'',
+         }
      }
   }
 
@@ -58,7 +68,10 @@ class Contact extends React.Component {
    }
      
 
-     this.setState({errors: errors});
+   this.setState({
+    ...this.state,
+    errors: errors,
+  });
      return formIsValid;
  }
   
@@ -74,7 +87,10 @@ class Contact extends React.Component {
   handleChange(field, e){         
       let fields = this.state.fields;
       fields[field] = e.target.value;        
-      this.setState({fields});
+      this.setState({
+        ...this.state,
+        fields
+      });
   }
 
   render(){
