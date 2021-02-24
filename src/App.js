@@ -2,19 +2,37 @@ import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import Main from './pages/Main';
 import customTheme from './utils/theme';
-import { BrowserRouter } from 'react-router-dom';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <ChakraProvider theme={customTheme}>
-        <div className="App">
-          <Main />
-        </div>
-      </ChakraProvider>
-    </BrowserRouter>
-    
-  );
+import React, { Component } from 'react'
+
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from './store/actions/auth';
+
+
+
+class App extends Component {
+
+  componentDidMount () {
+    this.props.onTryAutoSignup();
+  }
+  
+  render() {
+    return (
+          <ChakraProvider theme={customTheme}>
+            <div className="App">
+              <Main />
+            </div>
+          </ChakraProvider>
+    );
+  }
 }
 
-export default App;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignup: () => dispatch( actions.authCheckState() )
+  };
+};
+
+export default withRouter( connect( null, mapDispatchToProps )( App ) );

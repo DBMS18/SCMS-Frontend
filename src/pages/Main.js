@@ -6,7 +6,11 @@ import Signup from './Signup';
 import Signin from './Signin';
 import Store from './Store';
 import Contact from './Contact';
+import Signout from './Signout';
+import Manager from './Manager';
 import { Switch, Route, Redirect } from 'react-router-dom';
+
+import { withRouter } from 'react-router-dom';
 
 class Main extends Component {
   render(){
@@ -25,6 +29,8 @@ class Main extends Component {
               <Route exact path='/contact' component={() => <Contact />} />
               <Route exact path='/signup' component={() => <Signup />} />
               <Route exact path='/signin' component={() => <Signin />} />
+              <Route exact path='/signout' component={() => <Signout />} />
+              <Route exact path='/manager' component={() => <Manager />} />
               <Redirect to="/home" />
           </Switch>
         {/* <Footer /> */}
@@ -33,4 +39,4 @@ class Main extends Component {
   }
 }
 
-export default Main;
+export default withRouter(Main);

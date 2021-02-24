@@ -1,7 +1,7 @@
 
 
-import { Heading,Text } from "@chakra-ui/react";
-import { Container,Input,InputGroup,InputLeftElement,HStack, Stack} from "@chakra-ui/react";
+import { Center, Heading,Text } from "@chakra-ui/react";
+import { Container,Input,InputGroup,InputLeftElement,HStack, Stack, Spinner} from "@chakra-ui/react";
 import {ArrowRightIcon,ViewIcon,EmailIcon} from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import React, { Component } from 'react';
@@ -10,6 +10,9 @@ import { RiLock2Line } from "react-icons/ri";
 //import { Icon } from "@chakra-ui/react";
 //import { MdSettings } from "react-icons/md";
 
+//import HTTP from '../utils/HTTP';
+import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 class Signup extends Component{
 
@@ -25,7 +28,8 @@ class Signup extends Component{
                 email:'',
                 pwrd:'',
             },
-            errors: {}
+            errors: {},
+            success: false
         }
      }
    
@@ -103,14 +107,72 @@ class Signup extends Component{
           });
         return formIsValid;
     }
+
+    async check() {
+        return new Promise((resolve) => {
+            this.setState({
+                ...this.state,
+                loading: true
+            },
+            function(){resolve(this.handleValidation())}
+            )
+        });
+      }   
      
-    signUp(e){
-         e.preventDefault();
-   
-         if(this.handleValidation()){
-            alert("SignUp is Success");
+    async signUp(e){
+        e.preventDefault();
+        let validated = await this.check();
+        
+        console.log(JSON.stringify(this.state))
+        console.log(validated)
+
+        if(validated){
+            await axios.post('http://localhost:5000/api/guests/users/registration', this.state.fields)
+            .then(data => {
+                console.log("RESPONSE: " + JSON.stringify(data.data))
+                return data
+            }).then((data)=>{
+                this.setState({
+                    ...this.state,
+                    loading: false,
+                })
+                return data
+            }).then((data)=>{
+                if (data.data.err===0 && data.data.obj===true) {
+                    this.setState({
+                        ...this.state,
+                        success: true,
+                    },
+                    function(){alert(data.data.msg)}
+                    )
+                }else if (data.data.err===0 && data.data.obj===false) {
+                    alert(data.data.msg);
+                }else{
+                    alert("Someting is wrong");
+                }
+            }).catch(err => {
+                console.log("ERR: " + err.message)
+            })
             
-         }
+        }else{
+            console.log("error")
+        }
+        this.setState({
+            ...this.state,
+            loading: false
+        })
+
+        //  if(this.handleValidation()){
+        //     HTTP.post('http://localhost:5000/api/guests/users/registration', this.state.fields)
+        //     .then(data => {
+        //       console.log("RESPONSE: " + JSON.stringify(data))
+        //     })
+        //     .catch(err => {
+        //      console.log("ERR: " + err.message)
+        //     })
+        //     alert("SignUp is Success");
+            
+        //  }
    
      }
    
@@ -124,82 +186,100 @@ class Signup extends Component{
      }
    
     render(){
-        return(
-            <div>           
-             <form name="signupform" className="signupform" onSubmit= {this.signUp.bind(this)}>
-
-            <Container bg="white" w="80%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="14" marginBottom="14" borderRadius="lg">
-                <Heading margin="10">Create Account</Heading>
-                <Heading margin="10" fontSize="2xl">Personal Information</Heading>
-                <Stack spacing={5}>
-                    <HStack>
-                        <InputGroup>
-                            <InputLeftElement
-                                pointerEvents="none"
-                                children={<ViewIcon color="gray.300" />}
-                            />
-
-                            <Input  type="text" placeholder="First name" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "firstname")} value={this.state.fields["firstname"]} />
-                        </InputGroup>
-                        <Text style={{color: "red"}}>{this.state.errors["firstname"]}</Text>
-
-        
-                        <InputGroup>
-                            <InputLeftElement
-                                pointerEvents="none"
-                                children={<ViewIcon color="gray.300" />}
-                            />
-
-                            <Input type="text" placeholder="Last Name"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "lastname")} value={this.state.fields["lastname"]} />
-                        </InputGroup>
-                        <Text style={{color: "red"}}>{this.state.errors["lastname"]}</Text>
-
-                    </HStack>
+        if (this.state.success) {
+            return (
+                <Redirect to="/signin" />
+            );
+        }
+        if (this.state.loading) {
+            return(
+                <Center>
+                    <Spinner
+                        thickness="5px"
+                        speed="0.65s"
+                        emptyColor="black"
+                        color="white"
+                        size="xl"
+                    />
+                </Center>
+            );
+        }else{
+            return(
+                <div>           
+                    <form name="signupform" className="signupform" onSubmit= {this.signUp.bind(this)}>
     
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<AiFillIdcard color="gray.300" />}
-                        />
-
-                        <Input type="NIC" placeholder="NIC number" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "nic")} value={this.state.fields["nic"]} />
-                    </InputGroup>
-                    <Text style={{color: "red"}}>{this.state.errors["nic"]}</Text>
-
-                </Stack>
-                <Heading margin="10" fontSize="2xl">Account Security</Heading>
-                <Stack spacing={5}>
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<EmailIcon color="gray.300" />}
-                        />
-
-                        <Input  placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]}/>
-                    </InputGroup>
-                    <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
-
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<RiLock2Line color="gray.300" />}
-                        />
-
-                        <Input type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
-                    </InputGroup>
-                    <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
-
-                    <Button type="submit"className="button"  value="Register"  rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
-
-                        Create Account
-                    </Button>
-                </Stack>
-            </Container>
-
-            </form>
-            </div>
-
-        )
+                        <Container bg="white" w="80%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="14" marginBottom="14" borderRadius="lg">
+                            <Heading margin="10">Create Account</Heading>
+                            <Heading margin="10" fontSize="2xl">Personal Information</Heading>
+                            <Stack spacing={5}>
+                                <HStack>
+                                    <InputGroup>
+                                        <InputLeftElement
+                                            pointerEvents="none"
+                                            children={<ViewIcon color="gray.300" />}
+                                        />
+    
+                                        <Input  type="text" placeholder="First name" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "firstname")} value={this.state.fields["firstname"]} />
+                                    </InputGroup>
+                                    <Text style={{color: "red"}}>{this.state.errors["firstname"]}</Text>
+    
+                    
+                                    <InputGroup>
+                                        <InputLeftElement
+                                            pointerEvents="none"
+                                            children={<ViewIcon color="gray.300" />}
+                                        />
+    
+                                        <Input type="text" placeholder="Last Name"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "lastname")} value={this.state.fields["lastname"]} />
+                                    </InputGroup>
+                                    <Text style={{color: "red"}}>{this.state.errors["lastname"]}</Text>
+    
+                                </HStack>
+                
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<AiFillIdcard color="gray.300" />}
+                                    />
+    
+                                    <Input type="NIC" placeholder="NIC number" focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "nic")} value={this.state.fields["nic"]} />
+                                </InputGroup>
+                                <Text style={{color: "red"}}>{this.state.errors["nic"]}</Text>
+    
+                            </Stack>
+                            <Heading margin="10" fontSize="2xl">Account Security</Heading>
+                            <Stack spacing={5}>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<EmailIcon color="gray.300" />}
+                                    />
+    
+                                    <Input  placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]}/>
+                                </InputGroup>
+                                <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
+    
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<RiLock2Line color="gray.300" />}
+                                    />
+    
+                                    <Input type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
+                                </InputGroup>
+                                <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
+    
+                                <Button type="submit"className="button"  value="Register"  rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
+    
+                                    Create Account
+                                </Button>
+                            </Stack>
+                        </Container>
+    
+                    </form>
+                </div>
+            )
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 
-import { Container,Input,InputGroup,InputLeftElement,Stack} from "@chakra-ui/react";
+import { Container,Input,InputGroup,InputLeftElement,Stack, Spinner, Center} from "@chakra-ui/react";
 
 import { Heading,Text } from "@chakra-ui/react";
 
@@ -10,6 +10,12 @@ import { RiLock2Line } from "react-icons/ri";
 //import { Icon } from "@chakra-ui/react";
 //import { MdSettings } from "react-icons/md";
 
+//import HTTP from '../utils/HTTP';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+
+import * as actions from '../store/actions/auth';
+import { connect } from 'react-redux';
 
 class Signin extends Component{
 
@@ -24,7 +30,12 @@ class Signin extends Component{
             errors: {
               pwrd:'',
               email:''
-            }
+            },
+            loading: false,
+            token: null,
+            user:null,
+            role:null,
+            redirect:"login"
         }
      }
    
@@ -66,13 +77,88 @@ class Signin extends Component{
         });
         return formIsValid;
     }
+
+    async check() {
+        return new Promise((resolve) => {
+            this.setState({
+                ...this.state,
+                loading: true
+            },
+            function(){resolve(this.handleValidation())}
+            )
+        });
+      }   
      
-    signIn(e){
+    async signIn(e) {
          e.preventDefault();
-   
-         if(this.handleValidation()){
-            alert("Sign In Success");
-         }
+        
+        let validated = await this.check();
+
+        if(validated){
+            await axios.get('http://localhost:5000/api/guests/auth/login', null)
+            .then(data => {
+                console.log("object")
+                return data
+            }).then((data)=>{
+                return data
+            }).then((data)=>{
+                if (data.data.err===0) {
+                    alert(data.data.msg);
+                    if (data.data.obj.user.role==="customer") {
+                        this.setState({
+                            ...this.state,
+                            token: data.data.obj.token,
+                            user: data.data.obj.user,
+                            role: "customer"
+                        },
+                        async function(){await this.props.onAuth(this.state.token, this.state.user, "customer")}
+                        );
+                    }else if (data.data.obj.user.role==="manager") {
+                        this.setState({
+                            ...this.state,
+                            token: data.data.obj.token,
+                            user: data.data.obj.user,
+                            role: "manager"
+                        },
+                        async function(){await this.props.onAuth(this.state.token, this.state.user, "manager")}
+                        );
+                    }else if (data.data.obj.user.role==="storekeeper") {
+                        this.setState({
+                            ...this.state,
+                            token: data.data.obj.token,
+                            user: data.data.obj.user,
+                            role: "storekeeper"
+                        },
+                        async function(){await this.props.onAuth(this.state.token, this.state.user, "storekeeper")}
+                        );
+                    }
+                }else{
+                    alert(data.data.msg);
+                }
+            }).catch(err => {
+                console.log("ERR: " + err.message)
+            })
+            
+        }else{
+            console.log("error")
+        }
+        this.setState({
+            ...this.state,
+            loading: false
+        })
+
+
+
+        //  if(this.handleValidation()){
+        //    await HTTP.get('http://localhost:5000/api/guest/auth/login', null)
+        //    .then(data => {
+        //         console.log("GET: " + JSON.stringify(data))
+        //    })
+        //    .catch(err => {
+        //         console.log("ERR: " + err.message)
+        //    })
+        //     alert("Sign In Success");
+        //  }
    
      }
    
@@ -84,47 +170,90 @@ class Signin extends Component{
            fields
          });
      }
-     
+    
+    //  componentWillUnmount() {
+    //     this._isMounted = false;
+    //  }
     render(){
-        return(
-            <div>           
-             <form name="signinform" className="signinform" onSubmit= {this.signIn.bind(this)}>
-            <Container bg="white" w="80%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="14" marginBottom="14" borderRadius="lg">
-                <Heading margin="10">Sign in</Heading>
-                <Stack spacing={5}>
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<EmailIcon color="gray.300" />}
-                        />
+        console.log("isauth" + this.props.isAuthenticated);
+        console.log("token" + this.props.token);
+        if(this.props.isAuthenticated){
+            
+            if (localStorage.getItem('role')==="customer") {
+                return(
+                    <Redirect to='/home'/>
+                );
+            }else if (localStorage.getItem('role')==="manager") {
+                return(
+                    <Redirect to='/manager'/>
+                );
+            }
+        }
 
-                        <Input placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]} />
-                    </InputGroup>
-                    <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
-
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<RiLock2Line color="gray.300" />}
-                        />
-
-                        <Input type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
-                    </InputGroup>
-                    <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
-
-                    <Button type="submit"className="button"  value="Register" rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
-
-                        Sign in
-                    </Button>
-                </Stack>
-            </Container>
-
-            </form>
-            </div>
-
-        )
+        if (this.state.loading) {
+            return(
+                <Center>
+                    <Spinner
+                        thickness="5px"
+                        speed="0.65s"
+                        emptyColor="black"
+                        color="white"
+                        size="xl"
+                    />
+                </Center>
+            );
+        }else{
+            return(
+                <div>           
+                    <form name="signinform" className="signinform" onSubmit= {this.signIn.bind(this)}>
+                        <Container bg="white" w="80%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="14" marginBottom="14" borderRadius="lg">
+                            <Heading margin="10">Sign in</Heading>
+                            <Stack spacing={5}>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<EmailIcon color="gray.300" />}
+                                    />
+    
+                                    <Input isRequired placeholder="E-Mail"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]} />
+                                </InputGroup>
+                                <Text style={{color: "red"}}>{this.state.errors["email"]}</Text>
+    
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<RiLock2Line color="gray.300" />}
+                                    />
+    
+                                    <Input isRequired type="password" placeholder="Password"  focusBorderColor="#22543D" onChange={this.handleChange.bind(this, "pwrd")} value={this.state.fields["pwrd"]}/>
+                                </InputGroup>
+                                <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
+    
+                                <Button type="submit"className="button"  value="Register" rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
+                                    Sign in
+                                </Button>
+                            </Stack>
+                        </Container>
+                    </form>
+                </div>
+    
+            )
+        }
     }
 }
 
-  export default Signin;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: !(state.token === null || state.token === undefined),
+        token : state.token,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (token, user, role) => dispatch(actions.authSuccess(token, user, role)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
   

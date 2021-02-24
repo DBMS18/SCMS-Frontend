@@ -23,21 +23,28 @@ class Product extends Component{
                         <Center mb="5">
                             <Text>Rs.{this.props.product.Amount}</Text>
                         </Center>
-                        <Center mb="5">
-                            <HStack>
-                                <Text>Quantity : </Text>
-                                <NumberInput size="md" maxW={24} defaultValue={1} max={this.props.product.Quantity} clampValueOnBlur={true}>
-                                    <NumberInputField />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            </HStack>
-                        </Center>
-                        <Button colorScheme="teal" variant="solid">
-                            Add to Cart
-                        </Button>
+                        {
+                        localStorage.getItem('role') === "guest" ? 
+                            <div></div> 
+                        : 
+                            <>
+                                <Center mb="5">
+                                    <HStack>
+                                        <Text>Quantity : </Text>
+                                        <NumberInput size="md" maxW={24} defaultValue={1} max={this.props.product.Quantity} clampValueOnBlur={true}>
+                                            <NumberInputField />
+                                            <NumberInputStepper>
+                                                <NumberIncrementStepper />
+                                                <NumberDecrementStepper />
+                                            </NumberInputStepper>
+                                        </NumberInput>
+                                    </HStack>
+                                </Center>
+                                <Button colorScheme="teal" variant="solid">
+                                    Add to Cart
+                                </Button>
+                            </>
+                        }
                     </Box>
                 </HStack>
             </Box>
