@@ -8,6 +8,8 @@ import Store from './Store';
 import Contact from './Contact';
 import Signout from './Signout';
 import Manager from './Manager';
+import StoreKeeper from './StoreKeeper';
+import DriverAssistant from './DriverAssistant';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { withRouter } from 'react-router-dom';
@@ -31,6 +33,8 @@ class Main extends Component {
               <Route exact path='/signin' component={() => <Signin />} />
               <Route exact path='/signout' component={() => <Signout />} />
               <Route exact path='/manager' component={() => <Manager />} />
+              <Route exact path='/storekeeper' component={() => <StoreKeeper />} />
+              <Route exact path='/driverassistant' component={() => <DriverAssistant />} />
               <Redirect to="/home" />
           </Switch>
         {/* <Footer /> */}

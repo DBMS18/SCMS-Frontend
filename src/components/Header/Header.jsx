@@ -36,27 +36,15 @@ class Header extends Component{
             user : localStorage.getItem('role'),
             isAdmin : false,
         }
-        console.log("CON : "+ this.props.role)
-        console.log("CON : "+ this.props.isAuthenticated)
     }
 
     componentDidMount() {
-        console.log("CDM : "+ this.props.role)
-        console.log("CDM : "+ this.props.isAuthenticated)
-        console.log("CDM : "+ this.props.token)
-        console.log("CDM : "+ this.state.user !== "customer")
-        console.log("CDM : "+ this.state.user !=="guest")
-        console.log("CDM : "+ localStorage.getItem('role'))
-        console.log("CDM : "+ localStorage.getItem('token'))
-        console.log(this.state.user)
         if (this.state.user !== "customer" && this.state.user !== "guest") {
-            console.log("object11")
             this.setState({
                 ...this.state,
                 isAdmin: true,
             })
         }else{
-            console.log("object2")
             this.setState({
                 ...this.state,
                 isAdmin: false,
@@ -66,19 +54,13 @@ class Header extends Component{
     }
     
     componentDidUpdate(prevProps, prevState) {
-        console.log("preProps"+ JSON.stringify(prevProps))
-        console.log("curProps"+ JSON.stringify(this.props))
-        console.log("preState"+ JSON.stringify(prevState))
-        console.log("curState"+ JSON.stringify(this.state))
         if (prevProps.isAuthenticated === false & this.props.isAuthenticated === true) {
             if (this.state.user !== "customer" && this.state.user !== "guest") {
-                console.log("object11")
                 this.setState({
                     ...this.state,
                     isAdmin: true,
                 })
             }else{
-                console.log("object2")
                 this.setState({
                     ...this.state,
                     isAdmin: false,
@@ -113,9 +95,6 @@ class Header extends Component{
     }
 
     render(){
-        console.log("render : " + this.props.role)
-        console.log("render : " + this.props.isAuthenticated)
-        console.log("render : " + this.props.token)
         const customerHeader = <Flex
             borderBottom="2px"
             borderColor="green.200"
@@ -280,12 +259,7 @@ class Header extends Component{
         </Flex>;
 
         
-            console.log("isauth" + this.props.isAuthenticated);
-        console.log("token" + this.props.token);
-        console.log("user" + this.props.role);
-        console.log("is ADMIN"+this.state.isAdmin)
             if (!this.state.isAdmin) {
-                console.log("object customer")
                 return(
                     customerHeader
                 );

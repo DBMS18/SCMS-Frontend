@@ -8,20 +8,20 @@ class Product extends Component{
             <Box m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
                 <HStack>
                     <Square width="25%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
-                        <Image src='assets/images/maggi-chicken-tikiri.png' alt="Maggie Tikiri"/>
+                        <Image src={this.props.product.picture_url} alt="Maggie Tikiri"/>
                     </Square>
                     <Box height="100%" width="50%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
-                        <h2 style={{fontWeight: 'bold', fontSize: 20}}>{this.props.product.Type}</h2>
+                        <h2 style={{fontWeight: 'bold', fontSize: 20}}>{this.props.product.type}</h2>
                         <p>
-                            {this.props.product.Description}
+                            {this.props.product.description}
                         </p>
                     </Box>
                     <Box height="100%" width="25%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
                         <Center mb="5">
-                            <Text>{this.props.product.Quantity} items available</Text>
+                            <Text>{this.props.product.amount} items available</Text>
                         </Center>
                         <Center mb="5">
-                            <Text>Rs.{this.props.product.Amount}</Text>
+                            <Text>Rs.{this.props.product.price}</Text>
                         </Center>
                         {
                         localStorage.getItem('role') === "guest" ? 
@@ -31,7 +31,7 @@ class Product extends Component{
                                 <Center mb="5">
                                     <HStack>
                                         <Text>Quantity : </Text>
-                                        <NumberInput size="md" maxW={24} defaultValue={1} max={this.props.product.Quantity} clampValueOnBlur={true}>
+                                        <NumberInput size="md" maxW={24} defaultValue={1} max={this.props.product.amount} clampValueOnBlur={true}>
                                             <NumberInputField />
                                             <NumberInputStepper>
                                                 <NumberIncrementStepper />

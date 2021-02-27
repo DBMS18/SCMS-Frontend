@@ -97,11 +97,6 @@ class Signin extends Component{
         if(validated){
             await axios.get('http://localhost:5000/api/guests/auth/login', null)
             .then(data => {
-                console.log("object")
-                return data
-            }).then((data)=>{
-                return data
-            }).then((data)=>{
                 if (data.data.err===0) {
                     alert(data.data.msg);
                     if (data.data.obj.user.role==="customer") {
@@ -130,6 +125,15 @@ class Signin extends Component{
                             role: "storekeeper"
                         },
                         async function(){await this.props.onAuth(this.state.token, this.state.user, "storekeeper")}
+                        );
+                    }else if (data.data.obj.user.role==="driver_assistant") {
+                        this.setState({
+                            ...this.state,
+                            token: data.data.obj.token,
+                            user: data.data.obj.user,
+                            role: "driver_assistant"
+                        },
+                        async function(){await this.props.onAuth(this.state.token, this.state.user, "driver_assistant")}
                         );
                     }
                 }else{
