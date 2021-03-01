@@ -3,6 +3,34 @@ import { Text, NumberInput, NumberInputField, NumberInputStepper, NumberIncremen
 
 class Product extends Component{
 
+    constructor(props){
+        super(props);
+        this.state = {
+            selected:1
+        }
+    }
+
+    handleChange = (value) => {         
+        this.setState({
+          ...this.state,
+          selected:value,
+        });
+    }
+
+    addItemToCart(){
+        var product = {
+            amount: this.props.product.amount,
+            capacity: this.props.product.capacity,
+            name: this.props.product.name,
+            picture_url: this.props.product.picture_url,
+            price: this.props.product.price,
+            product_id: this.props.product.product_id,
+            type: this.props.product.type,
+            selected: parseInt(this.state.selected)
+        };
+        this.props.addItemToCart(product);
+    }
+
     render(){
         return(
             <Box m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
@@ -31,7 +59,7 @@ class Product extends Component{
                                 <Center mb="5">
                                     <HStack>
                                         <Text>Quantity : </Text>
-                                        <NumberInput size="md" maxW={24} defaultValue={1} max={this.props.product.amount} clampValueOnBlur={true}>
+                                        <NumberInput onChange={(value) => this.handleChange(value)} focusBorderColor={this.state.selected<=this.props.product.amount? "green.400" : "red.400"} size="md" maxW={24} defaultValue={1} max={this.props.product.amount} clampValueOnBlur={true}>
                                             <NumberInputField />
                                             <NumberInputStepper>
                                                 <NumberIncrementStepper />
@@ -40,7 +68,7 @@ class Product extends Component{
                                         </NumberInput>
                                     </HStack>
                                 </Center>
-                                <Button colorScheme="teal" variant="solid">
+                                <Button onClick={this.addItemToCart.bind(this)} colorScheme="teal" variant="solid">
                                     Add to Cart
                                 </Button>
                             </>

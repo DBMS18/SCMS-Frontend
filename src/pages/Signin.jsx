@@ -262,7 +262,7 @@ class Signin extends Component{
                                 </InputGroup>
                                 <Text style={{color: "red"}}>{this.state.errors["pwrd"]}</Text>
     
-                                <Button type="submit"className="button"  value="Register" rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
+                                <Button type="submit" className="button"  value="Register" rightIcon={<ArrowRightIcon />} bgColor="#22543D" color="white" variant="solid" width="max-content" alignSelf="center">
                                     Sign in
                                 </Button>
                             </Stack>

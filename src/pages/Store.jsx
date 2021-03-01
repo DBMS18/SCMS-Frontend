@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Box, Input, InputGroup, InputLeftElement, IconButton, Center, Spinner} from "@chakra-ui/react"
-import { Search2Icon } from '@chakra-ui/icons'
+import { Box, Center, Spinner} from "@chakra-ui/react"
 
 import Product from '../components/Product';
 import axios from 'axios';
+import SearchBar from '../components/SearchBar';
 
-//import * as actions from '../store/actions/auth';
+import * as actions from '../store/actions/auth';
 import { connect } from 'react-redux';
 
 class Store extends Component{
@@ -65,9 +65,81 @@ class Store extends Component{
             })
         }
     }
+
+    async searchProduct(keyword){
+        console.log("1")
+        this.setState({
+            ...this.state,
+            loading:true
+        })
+        if(this.props.role==="guest"){
+            await axios.get(`http://localhost:5000/api/guests/search-products?keyword=${keyword}`, null)
+            .then(data => {
+                if (data.data.err===0) {
+                    this.setState({
+                        ...this.state,
+                        products: data.data.obj
+                    })
+                }else{
+                    alert(data.data.msg);
+                }
+            }).catch(err => {
+                console.log("ERR: " + err.message)
+            })
+
+            this.setState({
+                ...this.state,
+                loading: false
+            })
+        }else if(this.props.role==="customer"){
+            const token = localStorage.getItem('token');
+            let data = {
+                headers: {
+                    'Access-Control-Allow-Headers': 'x-Auth-token',
+                    'x-Auth-token': token
+                }
+            }
+            await axios.get(`http://localhost:5000/api/customer/search-products?keyword=${keyword}`, Object.assign({}, {}, data))
+            .then(data => {
+                if (data.data.err===0) {
+                    this.setState({
+                        ...this.state,
+                        products: data.data.obj
+                    })
+                }else{
+                    alert(data.data.msg);
+                }
+            }).catch(err => {
+                console.log("ERR: " + err.message)
+            })
+
+            this.setState({
+                ...this.state,
+                loading: false
+            })
+        }
+    }
+
+    addItemToCart(selectedProduct){
+        console.log(selectedProduct)
+        var added = false;
+        var productsList = this.props.products.map((product, i) => {
+            if (product.product_id===selectedProduct.product_id) {
+                product.selected= selectedProduct.selected
+                added = true
+            }
+        });
+        if (!added) {
+            productsList = [selectedProduct, ...productsList]
+        }
+        console.log("new list "+productsList);
+        this.props.addItemToCart(productsList);
+        console.log("asf"+this.props.products)
+    }
     
 
     render(){
+        
         if (this.state.loading) {
             return(
                 <Center>
@@ -83,12 +155,12 @@ class Store extends Component{
         }else{
             const productsList = this.state.products.map((product, i) => {
                 return (
-                    <Product key={i} product={product} />
+                    <Product key={i} product={product} addItemToCart={this.addItemToCart.bind(this)} page={this.props.page}/>
                 );
             });
             return(
                 <div>
-                    <SearchBar />
+                    <SearchBar searchProduct={this.searchProduct.bind(this)} />
                     <Center>
                         <Box width="75%" m={5} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
                             {productsList}
@@ -100,33 +172,17 @@ class Store extends Component{
     }
 }
 
-const SearchBar = () => {
-    return(
-        <Box borderBottom="1px" borderColor="gray.300" p={5}>
-            <Center>
-                <InputGroup width="50%">
-                    <InputLeftElement
-                    pointerEvents="none"
-                    children={<Search2Icon color="white.100" />}
-                    />
-                    <Input type="search" placeholder="Search" color="black.400"/>
-                    <IconButton aria-label="Search database" icon={<Search2Icon />} bg="blueGreen.400"/>
-                </InputGroup>
-            </Center>
-        </Box>
-    );
-}
-
 const mapStateToProps = state => {
     return {
         role : state.role,
+        products: state.cart
     };
 };
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onLogout: () => dispatch(actions.logout()),
-//     };
-// };
+const mapDispatchToProps = dispatch => {
+    return {
+        addItemToCart: (product) => dispatch(actions.addItemToCart(product)),
+    };
+};
 
-export default connect(mapStateToProps, null)(Store);
+export default connect(mapStateToProps, mapDispatchToProps)(Store);
