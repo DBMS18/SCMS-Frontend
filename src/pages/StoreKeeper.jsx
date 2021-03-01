@@ -5,7 +5,7 @@ class StoreKeeper extends Component {
     render() {
         return (
             <div>
-                Manager
+                StoreKeeper
             </div>
         );
     }

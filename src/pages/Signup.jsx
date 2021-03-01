@@ -123,13 +123,10 @@ class Signup extends Component{
         e.preventDefault();
         let validated = await this.check();
         
-        console.log(JSON.stringify(this.state))
-        console.log(validated)
 
         if(validated){
-            await axios.post('http://localhost:5000/api/guests/users/registration', this.state.fields)
+            await axios.post('http://localhost:5000/api/guests/registration', this.state.fields)
             .then(data => {
-                console.log("RESPONSE: " + JSON.stringify(data.data))
                 return data
             }).then((data)=>{
                 this.setState({
@@ -142,25 +139,39 @@ class Signup extends Component{
                     this.setState({
                         ...this.state,
                         success: true,
+                        loading: false
                     },
                     function(){alert(data.data.msg)}
                     )
                 }else if (data.data.err===0 && data.data.obj===false) {
                     alert(data.data.msg);
+                    this.setState({
+                        ...this.state,
+                        loading: false
+                    })
                 }else{
                     alert("Someting is wrong");
+                    this.setState({
+                        ...this.state,
+                        loading: false
+                    })
                 }
             }).catch(err => {
                 console.log("ERR: " + err.message)
+                this.setState({
+                    ...this.state,
+                    loading: false
+                })
             })
             
         }else{
             console.log("error")
+            this.setState({
+                ...this.state,
+                loading: false
+            })
         }
-        this.setState({
-            ...this.state,
-            loading: false
-        })
+        
 
         //  if(this.handleValidation()){
         //     HTTP.post('http://localhost:5000/api/guests/users/registration', this.state.fields)

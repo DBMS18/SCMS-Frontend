@@ -18,7 +18,6 @@ class Store extends Component{
     }
     
     async componentDidMount() {
-        console.log(this.props.role)
         if(this.props.role==="guest"){
             await axios.get('http://localhost:5000/api/guests/get-products', null)
             .then(data => {
@@ -39,7 +38,14 @@ class Store extends Component{
                 loading: false
             })
         }else if(this.props.role==="customer"){
-            await axios.get('http://localhost:5000/api/customer/get-products', null)
+            const token = localStorage.getItem('token');
+            let data = {
+                headers: {
+                    'Access-Control-Allow-Headers': 'x-Auth-token',
+                    'x-Auth-token': token
+                }
+            }
+            await axios.get('http://localhost:5000/api/customer/get-products', Object.assign({}, {}, data))
             .then(data => {
                 if (data.data.err===0) {
                     this.setState({
@@ -62,7 +68,6 @@ class Store extends Component{
     
 
     render(){
-        console.log(this.state.products)
         if (this.state.loading) {
             return(
                 <Center>

@@ -95,61 +95,84 @@ class Signin extends Component{
         let validated = await this.check();
 
         if(validated){
-            await axios.get('http://localhost:5000/api/guests/auth/login', null)
+        await axios.get(`http://localhost:5000/api/guests/auth/login?email=${this.state.fields.email}&password=${this.state.fields.pwrd}`, null)
             .then(data => {
                 if (data.data.err===0) {
-                    alert(data.data.msg);
-                    if (data.data.obj.user.role==="customer") {
+                    
+                    if (data.data.obj.user.role_name==="customer") {
+                        alert(data.data.msg);
                         this.setState({
                             ...this.state,
                             token: data.data.obj.token,
                             user: data.data.obj.user,
-                            role: "customer"
+                            role: "customer",
+                            loading: false
                         },
                         async function(){await this.props.onAuth(this.state.token, this.state.user, "customer")}
                         );
-                    }else if (data.data.obj.user.role==="manager") {
+                    }else if (data.data.obj.user.role_name==="manager") {
+                        alert(data.data.msg);
                         this.setState({
                             ...this.state,
                             token: data.data.obj.token,
                             user: data.data.obj.user,
-                            role: "manager"
+                            role: "manager",
+                            loading: false
                         },
                         async function(){await this.props.onAuth(this.state.token, this.state.user, "manager")}
                         );
-                    }else if (data.data.obj.user.role==="storekeeper") {
+                    }else if (data.data.obj.user.role_name==="store_keeper") {
+                        alert(data.data.msg);
                         this.setState({
                             ...this.state,
                             token: data.data.obj.token,
                             user: data.data.obj.user,
-                            role: "storekeeper"
+                            role: "storekeeper",
+                            loading: false
                         },
-                        async function(){await this.props.onAuth(this.state.token, this.state.user, "storekeeper")}
+                        async function(){await this.props.onAuth(this.state.token, this.state.user, "store_keeper")}
                         );
-                    }else if (data.data.obj.user.role==="driver_assistant") {
+                    }else if (data.data.obj.user.role_name==="driver_assistant") {
+                        alert(data.data.msg);
                         this.setState({
                             ...this.state,
                             token: data.data.obj.token,
                             user: data.data.obj.user,
-                            role: "driver_assistant"
+                            role: "driver_assistant",
+                            loading: false
                         },
                         async function(){await this.props.onAuth(this.state.token, this.state.user, "driver_assistant")}
                         );
+                    }else{
+                        alert("Access Denied");
+                        this.setState({
+                            ...this.state,
+                            loading: false
+                        })
                     }
                 }else{
                     alert(data.data.msg);
+                    this.setState({
+                        ...this.state,
+                        loading: false
+                    })
                 }
             }).catch(err => {
-                console.log("ERR: " + err.message)
+                console.log("ERR: " + err.message);
+                this.setState({
+                    ...this.state,
+                    loading: false
+                })
             })
             
         }else{
-            console.log("error")
+            console.log("error");
+            this.setState({
+                ...this.state,
+                loading: false
+            })
         }
-        this.setState({
-            ...this.state,
-            loading: false
-        })
+        
 
 
 
@@ -179,8 +202,6 @@ class Signin extends Component{
     //     this._isMounted = false;
     //  }
     render(){
-        console.log("isauth" + this.props.isAuthenticated);
-        console.log("token" + this.props.token);
         if(this.props.isAuthenticated){
             
             if (localStorage.getItem('role')==="customer") {
@@ -190,6 +211,14 @@ class Signin extends Component{
             }else if (localStorage.getItem('role')==="manager") {
                 return(
                     <Redirect to='/manager'/>
+                );
+            }else if (localStorage.getItem('role')==="store_keeper") {
+                return(
+                    <Redirect to='/storekeeper'/>
+                );
+            }else if (localStorage.getItem('role')==="driver_assistant") {
+                return(
+                    <Redirect to='/driverassistant'/>
                 );
             }
         }

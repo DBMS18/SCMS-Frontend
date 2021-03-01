@@ -54,7 +54,7 @@ class Header extends Component{
     }
     
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.isAuthenticated === false & this.props.isAuthenticated === true) {
+        if (prevProps.isauth === "false" & this.props.isauth === "true") {
             if (this.state.user !== "customer" && this.state.user !== "guest") {
                 this.setState({
                     ...this.state,
@@ -91,7 +91,8 @@ class Header extends Component{
             ...this.state,
             isAdmin:false,
             user:"guest"
-        })
+        });
+
     }
 
     render(){
@@ -108,7 +109,7 @@ class Header extends Component{
             p={8}
             bg={["primary.500", "primary.500", "transparent", "transparent"]}
             color={["white", "white", "primary.700", "primary.700"]}
-            {...this.props}
+            
         >
             <Flex
                 align="center"
@@ -272,7 +273,7 @@ class Header extends Component{
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: !(state.token === null || state.token === undefined),
+        isauth: (state.token === null || state.token === undefined)? "false":"true",
         token : state.token,
         role : state.role
     };

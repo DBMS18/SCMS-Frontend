@@ -5,7 +5,7 @@ class DriverAssistant extends Component {
     render() {
         return (
             <div>
-                Manager
+                DriverAssistant
             </div>
         );
     }
