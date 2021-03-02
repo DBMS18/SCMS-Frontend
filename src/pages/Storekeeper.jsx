@@ -36,7 +36,7 @@ class Storekeeper extends Component {
             
             
             <Table variant="striped" colorScheme="red">
-                <TableCaption>Products waiting to be recieved</TableCaption>
+                <TableCaption  placement="top">Products waiting to be recieved</TableCaption>
                 <Thead>
                     <Tr>
                     <Th>Product ID</Th>
@@ -82,7 +82,7 @@ class Storekeeper extends Component {
                 <br/>
 
             <Table variant="striped" colorScheme="blue">
-                <TableCaption>Products waiting to be recieved</TableCaption>
+                <TableCaption placement="top">Products which are recieved</TableCaption>
                 <Thead>
                     <Tr>
                     <Th>Product ID</Th>
