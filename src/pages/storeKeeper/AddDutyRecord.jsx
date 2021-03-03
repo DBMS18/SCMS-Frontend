@@ -20,7 +20,8 @@ class AddDutyRecord extends Component {
                 time:''
             },
             loading:true,
-            finished:false
+            finished:false,
+            duty_id:''
          }
     }
 
@@ -126,6 +127,7 @@ class AddDutyRecord extends Component {
                     alert(data.data.msg);
                     this.setState({
                         ...this.state,
+                        duty_id:data.data.obj,
                         finished:true
                     })
                 }else{
@@ -163,7 +165,7 @@ class AddDutyRecord extends Component {
             return(
                 <Redirect to={{
                     pathname: "/addordertoduty",
-                    state: { fields: this.state.fields  }
+                    state: { fields: this.state.fields, duty_id:this.state.duty_id  }
                   }}/>
             )
         }
@@ -215,19 +217,19 @@ class AddDutyRecord extends Component {
                     <form name="checkoutform" className="checkoutform" onSubmit= {this.submit.bind(this)}>
                         <Center>
                             <Box width="50%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
-                                <Select isRequired placeholder="Select Route" isRequired onChange={this.handleChange.bind(this, "route")}>
+                                <Select placeholder="Select Route" isRequired onChange={this.handleChange.bind(this, "route")}>
                                     {routes}
                                 </Select>
-                                <Select isRequired placeholder="Select Truck" isRequired onChange={this.handleChange.bind(this, "truck")}>
+                                <Select placeholder="Select Truck" isRequired onChange={this.handleChange.bind(this, "truck")}>
                                     {trucks}
                                 </Select>
-                                <Select isRequired placeholder="Select Driver" isRequired onChange={this.handleChange.bind(this, "driver")}>
+                                <Select placeholder="Select Driver" isRequired onChange={this.handleChange.bind(this, "driver")}>
                                     {drivers}
                                 </Select>
-                                <Select isRequired placeholder="Select Assistant" isRequired onChange={this.handleChange.bind(this, "assistant")}>
+                                <Select placeholder="Select Assistant" isRequired onChange={this.handleChange.bind(this, "assistant")}>
                                     {assistants}
                                 </Select>
-                                <Select isRequired placeholder="Select Time" isRequired onChange={this.handleChange.bind(this, "time")}>
+                                <Select placeholder="Select Time" isRequired onChange={this.handleChange.bind(this, "time")}>
                                     {times}
                                 </Select>
                                 <Button m={1} type="submit" colorScheme="teal" variant="solid">

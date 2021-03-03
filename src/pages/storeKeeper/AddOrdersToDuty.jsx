@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button, Center, Select, Spinner } from "@chakra-ui/react";
+import { Box, Button, Center, Select, Spinner, TableCaption, Tbody, Tfoot, Th, Thead, Tr, Table, Td } from "@chakra-ui/react";
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
@@ -7,35 +7,39 @@ class AddOrdersToDuty extends Component {
     constructor(props){
         super(props);
         this.state = { 
-            trucks:[],
-            fields:{
-                truck:'',
-            },
-            loading:true
+            orderlist:[],
+            loading:true,
+            duty_id:''
          }
     }
 
-    async componentDidMount() {
-        // const token = localStorage.getItem('token');
-        // let data = {
-        //     headers: {
-        //         'Access-Control-Allow-Headers': 'x-Auth-token',
-        //         'x-Auth-token': token
-        //     }
-        // }
-        // await axios.get('http://localhost:5000/api/storekeeper/duty-set-off', Object.assign({}, {}, data))
-        //     .then(data => {
-        //         if (data.data.err===0) {
-        //             this.setState({
-        //                 ...this.state,
-        //                 trucks: data.data.obj
-        //             })
-        //         }else{
-        //             alert(data.data.msg);
-        //         }
-        //     }).catch(err => {
-        //         console.log("ERR: " + err.message)
-        //     })
+    async componentDidMount(props) {
+        // assistant: "7"
+        // driver: "5"
+        // route: "1"
+        // time: "4"
+        // truck: "NB-1227"
+        //console.log("property_id",this.props.location.state.duty_id);
+        const token = localStorage.getItem('token');
+        let data = {
+            headers: {
+                'Access-Control-Allow-Headers': 'x-Auth-token',
+                'x-Auth-token': token
+            }
+        }
+        await axios.get(`http://localhost:5000/api/storekeeper/received-orders/${1}`, Object.assign({}, {}, data))
+            .then(data => {
+                if (data.data.err===0) {
+                    this.setState({
+                        ...this.state,
+                        orderlist: data.data.obj
+                    })
+                }else{
+                    alert(data.data.msg);
+                }
+            }).catch(err => {
+                console.log("ERR: " + err.message)
+            })
 
             this.setState({
                 ...this.state,
@@ -44,14 +48,6 @@ class AddOrdersToDuty extends Component {
 
     }
     
-    handleChange(field, e){
-        let fields = this.state.fields;
-         fields[field] = e.target.value;        
-         this.setState({
-           ...this.state,
-           fields
-         });
-    }
 
     async submit(e) {
         e.preventDefault();
@@ -87,6 +83,27 @@ class AddOrdersToDuty extends Component {
         
     }
 
+    async handleClick(value){
+        var details = {
+            order_id:value,
+            duty_id:this.state.duty_id
+        }
+        const token = localStorage.getItem('token');
+        let data = {
+            headers: {
+                'Access-Control-Allow-Headers': 'x-Auth-token',
+                'x-Auth-token': token
+            }
+        }
+
+        await axios.post('http://localhost:5000/api/storekeeper/order-markas-send',details,data)
+        .then((data)=>{
+            window.location.reload();
+        }).catch(err => {
+                console.log("ERR: " + err.message)
+         })
+    }
+
     render() {
         if (localStorage.getItem('role')==="customer") {
             return(
@@ -114,25 +131,41 @@ class AddOrdersToDuty extends Component {
                 </Center>
             );
         }else{
-            // const trucks = this.state.trucks.map((truck, i)=>{
-            //     return(
-            //         <option key={i} value={truck.duty_id}>{truck.truck_number}</option>
-            //     )
-            // })
+            var orderList=this.state.orderlist.map((order,i)=>{
+                var products = order.product_list.map((product,i)=>{
+                    return `${product.type}(${product.ordered_quantity}), `
+                })
+                return(
+                    <Tr key={i}>
+                        <Td>{order.order_id}</Td>
+                        <Td>{order.date}</Td>
+                        <Td>{products}</Td>
+                        <Td>{order.total_capacity}</Td>
+                        <Td><Button size="xs" colorScheme="blue" value={order.order_id} onClick={this.handleClick.bind(this,order.order_id)} >Received to Store</Button></Td>
+                    </Tr>
+                );
+            });
             return (
                 <div>
-                    <form name="checkoutform" className="checkoutform" onSubmit= {this.submit.bind(this)}>
-                        <Center>
-                            <Box width="50%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
-                                <Select isRequired placeholder="Select Sending trucks" isRequired onChange={this.handleChange.bind(this, "truck")}>
-                                    
-                                </Select>
-                                <Button m={1} type="submit"  colorScheme="teal" variant="solid">
-                                    Mark Finish
-                                </Button>
-                            </Box>
-                        </Center>
-                    </form>
+                    <Center>
+                        <Table variant="striped" colorScheme="red">
+                            <TableCaption  placement="top">Put orders to duty record</TableCaption>
+                            <Thead>
+                                <Tr>
+                                <Th>Order ID</Th>
+                                <Th>Received date</Th>
+                                <Th>Product list</Th>
+                                <Th>Total capacity</Th>
+                                <Th>Select</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {orderList}
+                            </Tbody>
+                            <Tfoot>
+                            </Tfoot>
+                        </Table>
+                    </Center>
                 </div>
             );
         }
