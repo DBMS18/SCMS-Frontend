@@ -1,48 +1,45 @@
 import React, { Component } from 'react';
 import { Text,Button, Box, Image, Center, HStack, Square} from "@chakra-ui/react"
 
-class Order extends Component{
+class StoreOrder extends Component{
 
     constructor(props){
         super(props);
     }
 
-    confirmOrder(){
-        var order_id=this.props.order.order_id;
-    }
     
 
     render(){
         return(
             <Box height="100%" width="100%" m={1} borderWidth={1} borderColor="green.500" p={5} borderRadius="lg" marginBottom="10">
                 <HStack>
-                    <Square width="25%" m={1}  p={5} borderRadius="lg">
-                        <Image src={this.props.order.picture_url} alt="Product Image"/>
+                <Square width="25%" m={1} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
+                        <Image src="assets/images/supply chain logo.png" alt="Order Delivery"/>
                     </Square>
                     <Box height="100%" width="50%" m={1}  p={20} borderRadius="lg">
-                        <h2 style={{fontWeight: 'bold', fontSize: 30}}>{this.props.order.name}</h2>
+                        <h2 style={{fontWeight: 'bold', fontSize: 30}}>Order ID :{this.props.order.order_id}</h2>
                         <Text align="left">
-                            <b>Type :</b>{this.props.order.type}
+                            <b>Customer :</b>{this.props.order.first_name},{this.props.order.last_name}
                         </Text>
                         <Text align="left">
-                            <b>Description :</b>{this.props.order.description}
+                            <b>Street :</b>{this.props.order.street_id}
                         </Text>
                         <Text align="left">
-                            <b>Date :</b>{this.props.order.date}
+                            <b>Zip :</b>{this.props.order.zip}
                         </Text>
                         <Text align="left">
-                        <b>Quantity : </b>{this.props.order.ordered_quantity}
+                        <b>Total_Price : </b>{this.props.order.total_amount}
                         </Text>
                     </Box>
                     
                             {
-                                this.props.order.status !=='delivered'?
+                                this.props.order.order_status ==='delivered'?
                                     <div></div> 
                                     : 
                                         <>
                             <Box height="100%" width="25%" m={1}  p={5} borderRadius="lg">
                         <Center mb="5">
-                            <Button colorScheme="green" onClick={this.props.confirmOrder.bind(this,this.props.order.order_id)}>Confirm Receive</Button>
+                            <Button colorScheme="green" onClick={this.props.confirmOrder.bind(this,this.props.order.order_id)}>Confirm Delivery</Button>
                             
                         </Center>
                         <Center mb="5">
@@ -52,14 +49,14 @@ class Order extends Component{
                             }
 
 {
-                                this.props.order.status ==='delivered'?
+                                this.props.order.order_status !=='delivered'?
                                     <div></div> 
                                     : 
                                         <>
                             <Box height="100%" width="25%" m={1}  p={5} borderRadius="lg">
                         <Center mb="5">
                             <Box borderWidth={2} borderColor="green.500" p={4} borderRadius="full"><b>Order Status :</b>
-                            {this.props.order.status}</Box>
+                            {this.props.order.order_status}</Box>
                             
                         </Center>
                         <Center mb="5">
@@ -73,4 +70,4 @@ class Order extends Component{
     }
 }
 
-export default Order;
+export default StoreOrder;
