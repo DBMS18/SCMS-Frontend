@@ -12,15 +12,15 @@ class AssignGoods extends Component{
     constructor(props){
         super(props);
         this.state = {
-            ordersforAssign: {},
-            assignedOrders: {},
-            train:{},
+            ordersforAssign: [],
+            assignedOrders: [],
+            train:[],
             loading:true
         }
     }
 
     async componentDidMount() {
-      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      await axios.get(`http://localhost:5000/api/manager/assign-goods`, null)
       .then(data => {
           if (data.data.err===0) {
               this.setState({
@@ -34,7 +34,7 @@ class AssignGoods extends Component{
           console.log("ERR: " + err.message)
       })
 
-      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      await axios.get(`http://localhost:5000/api/manager/assigned-goods`, null)
       .then(data => {
           if (data.data.err===0) {
               this.setState({
@@ -48,7 +48,7 @@ class AssignGoods extends Component{
           console.log("ERR: " + err.message)
       })
 
-      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      await axios.get(`http://localhost:5000/api/manager/trains-list`, null)
       .then(data => {
           if (data.data.err===0) {
               this.setState({
@@ -69,13 +69,12 @@ class AssignGoods extends Component{
 
     }
 
-     async assignOrder(){
+     async assignOrder(train_id,order_id,total_capacity){
         this.setState({
           ...this.state,
           loading:true
       });
-
-      await axios.put(`http://localhost:5000/api/customer/mark-delivery/`, null)
+      await axios.put(`http://localhost:5000/api/manager/assigned-goods/order_id=${order_id}&train_id=${train_id}`, null)
       .then(data => {
           if (data.data.err===0) {
               alert(data.data.msg);
@@ -100,12 +99,12 @@ class AssignGoods extends Component{
 
   
 
-  async removeOrder(){
+  async removeOrder(order_id){
     this.setState({
       ...this.state,
       loading:true
   });
-      await axios.put(`http://localhost:5000/api/customer/mark-delivery/`, null)
+      await axios.put(`http://localhost:5000/api/manager/assigned-goods/${order_id}`, null)
       .then(data => {
           if (data.data.err===0) {
               alert(data.data.msg);

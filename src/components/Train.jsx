@@ -23,9 +23,9 @@ class Train extends Component{
           
             <Tr >
               
-              <Td align="left">{this.props.train.train_id}</Td>
-              <Td align="left">{this.props.train.total_capacity}</Td>
-              <Td align="left">{this.props.train.remain_capacity}</Td>
+              <Td align="left">{this.props.train.train.train_id}</Td>
+              <Td align="left">{this.props.train.train.capacity}</Td>
+              <Td align="left">{this.props.train.remaining}</Td>
             </Tr>
         </Tbody>
       </Table> 

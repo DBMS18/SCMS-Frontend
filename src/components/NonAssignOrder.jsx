@@ -49,8 +49,8 @@ class NonAssignOrder extends Component{
               <Td align="left">{this.props.order.store_id}</Td>
               <Td align="left">{this.props.order.date}</Td>
               <Td align="left">{this.props.order.expected_date}</Td>
-              <Td align="left"><Select bgColor="green.400" placeholder="Select Train" value={this.X} onChange={this.handleChange}>{this.props.order.train_list.map(this.MakeItem)}</Select></Td>
-              <Td><Button colorScheme="green" onClick={this.props.assignOrder.bind(this,this.state.Status)}>Assign</Button>
+              <Td align="left"><Select bgColor="green.400" placeholder="Select Train" value={this.X} onChange={this.handleChange}>{this.MakeItem(this.props.order.train_list.train_id)}</Select></Td>
+              <Td><Button colorScheme="green" onClick={this.props.assignOrder.bind(this,this.state.Status,this.props.order.order_id,this.props.order.total_capacity)}>Assign</Button>
               </Td>
             </Tr>
         </Tbody>
