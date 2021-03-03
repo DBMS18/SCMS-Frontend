@@ -17,6 +17,7 @@ import AddOrdersToDuty from './storeKeeper/AddOrdersToDuty';
 import AddToStore from './storeKeeper/AddToStore';
 import DriverAssistant from './DriverAssistant';
 import MyOrder from './customerConfirm';
+import Admin from './Admin';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { withRouter } from 'react-router-dom';
@@ -49,6 +50,8 @@ class Main extends Component {
               <Route exact path='/markoff' component={() => <MarkOff />} />
               <Route exact path='/addordertoduty' component={() => <AddOrdersToDuty />} />
               <Route exact path='/addtostore' component={() => <AddToStore />} />
+
+              <Route exact path='/admin' component={() => <Admin />} />
               
 
               <Route exact path='/driverassistant' component={() => <DriverAssistant />} />

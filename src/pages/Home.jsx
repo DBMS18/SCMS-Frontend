@@ -16,7 +16,11 @@ function Home(props) {
         return(
             <Redirect to='/driverassistant'/>
         );
-    }
+    }else if (localStorage.getItem('role')==="admin") {
+      return(
+          <Redirect to='/admin'/>
+      );
+  }
     return(
       <div className="container">
         <h4>Home</h4>

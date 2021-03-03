@@ -220,6 +220,10 @@ class Signin extends Component{
                 return(
                     <Redirect to='/driverassistant'/>
                 );
+            }else if (localStorage.getItem('role')==="admin") {
+                return(
+                    <Redirect to='/admin'/>
+                );
             }
         }
 
