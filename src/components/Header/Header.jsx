@@ -96,6 +96,7 @@ class Header extends Component{
     }
 
     render(){
+        console.log("object")
         const customerHeader = <Flex
             borderBottom="2px"
             borderColor="green.200"
@@ -258,16 +259,9 @@ class Header extends Component{
                 </Flex>
             </Box>
         </Flex>;
-
-        
-            if (!this.state.isAdmin) {
-                return(
-                    customerHeader
-                );
-            }else {
-                return(<div></div>);
-            }
-              
+        return(
+            customerHeader
+        );       
     }
 }
 

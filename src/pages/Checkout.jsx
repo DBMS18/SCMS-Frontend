@@ -91,19 +91,16 @@ class Checkout extends Component {
     async saveOrder(details){
         var today = new Date();
         var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
-        console.log(nextweek)
-        console.log(details)
+
         const token = localStorage.getItem('token');
-        console.log(token);
-            let data = {
-                headers: {
-                    'Access-Control-Allow-Headers': 'x-Auth-token',
-                    'x-Auth-token': token
-                }
+        let data = {
+            headers: {
+                'Access-Control-Allow-Headers': 'x-Auth-token',
+                'x-Auth-token': token
             }
-            await axios.post('http://localhost:5000/api/customer/checkout_cart',details, data)
+        }
+        await axios.post('http://localhost:5000/api/customer/checkout_cart',details, data)
             .then(data => {
-                alert(data.data.msg);
                 if (data.data.err===0) {
                     this.setState({
                         ...this.state,

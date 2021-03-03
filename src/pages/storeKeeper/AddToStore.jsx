@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-
-class StoreKeeper extends Component {
+import { Box, Button, Center } from "@chakra-ui/react"
+class AddToStore extends Component {
     state = {  }
     render() {
         return (
             <div>
-                StoreKeeper
+                add to store
             </div>
         );
     }
 }
 
-export default StoreKeeper;
+export default AddToStore;
