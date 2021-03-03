@@ -17,21 +17,18 @@ class Order extends Component{
             <Box height="100%" width="100%" m={1} borderWidth={1} borderColor="green.500" p={5} borderRadius="lg" marginBottom="10">
                 <HStack>
                     <Square width="25%" m={1}  p={5} borderRadius="lg">
-                        <Image src={this.props.order.picture_url} alt="Product Image"/>
+                        <Image src='assets/images/supply chain logo.png' alt="Product Image"/>
                     </Square>
                     <Box height="100%" width="50%" m={1}  p={20} borderRadius="lg">
-                        <h2 style={{fontWeight: 'bold', fontSize: 30}}>{this.props.order.name}</h2>
-                        <Text align="left">
-                            <b>Type :</b>{this.props.order.type}
-                        </Text>
-                        <Text align="left">
-                            <b>Description :</b>{this.props.order.description}
-                        </Text>
+                        <h2 style={{fontWeight: 'bold', fontSize: 30}}>{this.props.order.order_id}</h2>
                         <Text align="left">
                             <b>Date :</b>{this.props.order.date}
                         </Text>
                         <Text align="left">
-                        <b>Quantity : </b>{this.props.order.ordered_quantity}
+                            <b>Total Amount :</b>{this.props.order.total_amount}
+                        </Text>
+                        <Text align="left"><b>Your products in order:</b>
+                        {this.props.order.product.map((products) => <li>{products}</li>)}
                         </Text>
                     </Box>
                     

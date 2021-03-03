@@ -1,107 +1,201 @@
-import React from 'react';
-import { Center, Image, Select, useDisclosure } from "@chakra-ui/react";
+import React, { Component } from 'react';
+import { HStack, Image, Select, useDisclosure } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-  } from "@chakra-ui/react";
-import { Container,Box } from "@chakra-ui/react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react";
-import {Button,Text} from "@chakra-ui/react"
-import { Flex,Spacer} from "@chakra-ui/react"
+import axios from 'axios';
+import { Center,Spinner,Box } from "@chakra-ui/react";
 
+import NonAssignOrder from '../components/NonAssignOrder';
+import AssignOrder from '../components/AssignOrder';
+import Train from '../components/Train';
 
-const trainrows = [
-  {train:"ABCD",city: "Colombo", time:"8.00"},
-  {train:"ABCD",city: ["Colombo"," Galle"], time:"8.00"},
-  {train:"ABCD",city: "Colombo", time:"8.00"},
-  {train:"ABCD",city: "Colombo", time:"8.00"},
-  {train:"ABCD",city: "Colombo", time:"8.00"}
-];
+class AssignGoods extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            ordersforAssign: {},
+            assignedOrders: {},
+            train:{},
+            loading:true
+        }
+    }
 
-const orderrows = [
-  {order:"ABCD",city: "Colombo", availabletrains:["ABCD","FGHI"]},
-  {order:"ABCD",city: "Colombo", availabletrains:["8.00"]},
-  {order:"ABCD",city: "Colombo", availabletrains:["8.00"]},
-  {order:"ABCD",city: "Colombo", availabletrains:["8.00"]},
-];
+    async componentDidMount() {
+      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      .then(data => {
+          if (data.data.err===0) {
+              this.setState({
+                  ...this.state,
+                  ordersforAssign: data.data.obj
+              })
+          }else{
+              alert(data.data.msg);
+          }
+      }).catch(err => {
+          console.log("ERR: " + err.message)
+      })
 
-const MakeItem = function(X) {
-  return <option>{X}</option>;
-};
+      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      .then(data => {
+          if (data.data.err===0) {
+              this.setState({
+                  ...this.state,
+                  assignedOrders: data.data.obj
+              })
+          }else{
+              alert(data.data.msg);
+          }
+      }).catch(err => {
+          console.log("ERR: " + err.message)
+      })
 
+      await axios.get(`http://localhost:5000/api/manager/assign-orders`, null)
+      .then(data => {
+          if (data.data.err===0) {
+              this.setState({
+                  ...this.state,
+                  train: data.data.obj
+              })
+          }else{
+              alert(data.data.msg);
+          }
+      }).catch(err => {
+          console.log("ERR: " + err.message)
+      })
 
+      this.setState({
+          ...this.state,
+          loading: false
+      })
 
-     
+    }
 
-export default function AssignGoods() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [train,setTrain] = React.useState("");
+     async assignOrder(){
+        this.setState({
+          ...this.state,
+          loading:true
+      });
+
+      await axios.put(`http://localhost:5000/api/customer/mark-delivery/`, null)
+      .then(data => {
+          if (data.data.err===0) {
+              alert(data.data.msg);
+          }else{
+              alert(data.data.msg);
+          }
+      }).catch(err => {
+          console.log("ERR: " + err.message)
+      })
+
+      this.setState({
+          ...this.state,
+          loading: false
+      })
+
+      this.refreshPage();
+  }
+
+  refreshPage() {
+      window.location.reload();
+    }
 
   
-  const assignToTrain=(e)=>{
-      alert(setTrain)
+
+  async removeOrder(){
+    this.setState({
+      ...this.state,
+      loading:true
+  });
+      await axios.put(`http://localhost:5000/api/customer/mark-delivery/`, null)
+      .then(data => {
+          if (data.data.err===0) {
+              alert(data.data.msg);
+          }else{
+              alert(data.data.msg);
+          }
+      }).catch(err => {
+          console.log("ERR: " + err.message)
+      })
+
+      this.setState({
+          ...this.state,
+          loading: false
+      })
+
+      this.refreshPage();
   }
+
+  refreshPage() {
+      window.location.reload();
+    }
+
+  
+
+  render(){
+
+    if (this.state.loading) {
+        return(
+            <Center>
+                <Spinner
+                    thickness="5px"
+                    speed="0.65s"
+                    emptyColor="black"
+                    color="white"
+                    size="xl"
+                />
+            </Center>
+        );
+    }else{
+    
+    const ordersforAssign = this.state.ordersforAssign.map((order, i) => {
+        return (
+
+            <NonAssignOrder key={i} order={order} page={this.props.page} assignOrder={this.assignOrder.bind(this)}/>
+        );
+    });
+
+    const assignedOrders = this.state.assignedOrders.map((assigned, j) => {
+      return (
+
+          <AssignOrder key={j} assigned={assigned} page={this.props.page} removeOrder={this.removeOrder.bind(this)}/>
+      );
+  });
+
+  const trainList = this.state.train.map((train, k) => {
+    return (
+
+        <Train key={k} train={train} page={this.props.page} />
+    );
+});
+  
   
   return (
-<Container >
-<Heading color="black" p={4}>Train Schedule</Heading>
-        <Box bg="white" p={4} color="black" border="2px" borderColor="gray.300" marginTop="10" borderRadius="lg">
-  <Table variant="striped" colorScheme="green" >
-        <Thead>
-          <Tr>
-            <Th align="right">Train</Th>
-            <Th align="right">Cities</Th>
-            <Th align="right">Time</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {trainrows.map((row1) => (
-            <Tr >
-              
-              <Td align="right">{row1.train}</Td>
-              <Td align="right">{row1.city}</Td>
-              <Td align="right">{row1.time}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table> 
-</Box>    
+<Box height="100%" width="100%" m={1}  p={5} borderRadius="lg" marginBottom="10" >
+<Heading color="black" p={4} marginTop="10">List of Trains</Heading>
+      
+      <Center>
+                    <Box width="75%" m={5}  p={5} borderRadius="lg" marginBottom="20">
+                        {trainList}
+                    </Box> 
+                </Center> 
+                   
       <Heading color="black" p={4} marginTop="10">Assign Orders to Train</Heading>
       
-      <Box bg="white" w="100%" p={4} color="black" border="2px" borderColor="gray.300" marginTop="10" borderRadius="lg" marginBottom="20%">
-      <Table variant="striped" colorScheme="green"> 
-        <Thead>
-          <Tr>
-            <Th align="right" >Order</Th>
-            <Th align="right" >City</Th>
-            <Th align="right" >Available Trains</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {orderrows.map((row2) => (
-            <Tr >
-              <Td align="right">{row2.order}</Td>
-              <Td align="right">{row2.city}</Td>
-              <Td align="right"><Select bgColor="green.400" placeholder="Select Train" value={train} onChange={e => setTrain(e.target.value)}>{row2.availabletrains.map(MakeItem)}</Select>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      <Center>
+                    <Box width="75%" m={5}  p={5} borderRadius="lg" marginBottom="20">
+                        {ordersforAssign}
+                    </Box> 
+                </Center> 
+      <Heading color="black" p={4}>Assigned Orders</Heading>
+      <Center>
+                    <Box width="75%" m={5}  p={5} borderRadius="lg" marginBottom="20">
+                        {assignedOrders}
+                    </Box> 
+                </Center> 
+        
       </Box>
-      </Container>
   );
 }
+  }
+}
+
+export default AssignGoods;
