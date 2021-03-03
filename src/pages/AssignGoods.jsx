@@ -41,9 +41,7 @@ class AssignGoods extends Component{
                   ...this.state,
                   assignedOrders: data.data.obj
               })
-          }else{
-              alert(data.data.msg);
-          }
+            }
       }).catch(err => {
           console.log("ERR: " + err.message)
       })
@@ -74,6 +72,15 @@ class AssignGoods extends Component{
           ...this.state,
           loading:true
       });
+      let index=0;
+      for (let a in this.state.train){
+          if(this.state.train[a].train.train_id===train_id){
+                index=a;
+          }
+      }
+      if(total_capacity>this.state.train[index].remaining){
+          alert ('You cannot exceeded the remaining capacity of the train')
+      }else{
       await axios.put(`http://localhost:5000/api/manager/assigned-goods/order_id=${order_id}&train_id=${train_id}`, null)
       .then(data => {
           if (data.data.err===0) {
@@ -84,6 +91,7 @@ class AssignGoods extends Component{
       }).catch(err => {
           console.log("ERR: " + err.message)
       })
+    }
 
       this.setState({
           ...this.state,
