@@ -5,7 +5,7 @@ import { Heading,Text } from "@chakra-ui/react";
 import { Textarea } from "@chakra-ui/react";
 import {ArrowRightIcon,ViewIcon,PhoneIcon,EmailIcon} from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
-
+import { Redirect } from 'react-router-dom';
 
 class Contact extends React.Component {
   constructor(props){
@@ -94,6 +94,19 @@ class Contact extends React.Component {
   }
 
   render(){
+    if (localStorage.getItem('role')==="manager") {
+        return(
+            <Redirect to='/manager'/>
+        );
+    }else if (localStorage.getItem('role')==="store_keeper") {
+        return(
+            <Redirect to='/storekeeper'/>
+        );
+    }else if (localStorage.getItem('role')==="driver_assistant") {
+        return(
+            <Redirect to='/driverassistant'/>
+        );
+    }
       return (
           <div>           
              <form name="contactform" className="contactform" onSubmit= {this.contactSubmit.bind(this)}>

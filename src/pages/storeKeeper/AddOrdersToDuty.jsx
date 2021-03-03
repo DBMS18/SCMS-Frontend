@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Box, Button, Center, Select, Spinner } from "@chakra-ui/react";
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class AddOrdersToDuty extends Component {
     constructor(props){
@@ -87,6 +88,19 @@ class AddOrdersToDuty extends Component {
     }
 
     render() {
+        if (localStorage.getItem('role')==="customer") {
+            return(
+                <Redirect to='/home'/>
+            );
+        }else if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         if (this.state.loading) {
             return(
                 <Center>

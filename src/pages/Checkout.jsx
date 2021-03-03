@@ -4,6 +4,7 @@ import { Input, Center, Heading, Button, Box, Select, Spinner } from "@chakra-ui
 import { ArrowRightIcon } from '@chakra-ui/icons';
 import { checkout } from 'superagent';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class Checkout extends Component {
     constructor(props){
@@ -136,6 +137,19 @@ class Checkout extends Component {
     }
 
     render() {
+        if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="store_keeper") {
+            return(
+                <Redirect to='/storekeeper'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         if (this.state.loading) {
             return(
                 <Center>

@@ -16,6 +16,7 @@ import MarkOff from './storeKeeper/MarkOff';
 import AddOrdersToDuty from './storeKeeper/AddOrdersToDuty';
 import AddToStore from './storeKeeper/AddToStore';
 import DriverAssistant from './DriverAssistant';
+import MyOrder from './customerConfirm';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { withRouter } from 'react-router-dom';
@@ -41,6 +42,7 @@ class Main extends Component {
               <Route exact path='/signout' component={() => <Signout />} />
               <Route exact path='/manager' component={() => <Manager />} />
               <Route exact path='/checkout' component={() => <Checkout />} />
+              <Route exact path='/notification' component={() => <MyOrder />} />
 
               <Route exact path='/storekeeper' component={() => <StoreKeeper />} />
               <Route exact path='/addduty' component={() => <AddDutyRecord />} />

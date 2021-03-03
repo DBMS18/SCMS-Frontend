@@ -26,6 +26,19 @@ class StoreKeeper extends Component {
      }
 
     render() {
+        if (localStorage.getItem('role')==="customer") {
+            return(
+                <Redirect to='/home'/>
+            );
+        }else if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         console.log(this.state.page)
         if (this.state.page!=='') {
             return(

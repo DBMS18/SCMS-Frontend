@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar';
 
 import * as actions from '../store/actions/auth';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 class Store extends Component{
     constructor(props){
@@ -138,6 +139,19 @@ class Store extends Component{
     
 
     render(){
+        if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="store_keeper") {
+            return(
+                <Redirect to='/storekeeper'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         
         if (this.state.loading) {
             return(

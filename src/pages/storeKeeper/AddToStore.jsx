@@ -16,6 +16,7 @@ import { Input } from "@chakra-ui/react"
 import { Grid, GridItem } from "@chakra-ui/react"
 import axios from 'axios';
 import { Box, Center, Spinner} from "@chakra-ui/react"
+import { Redirect } from 'react-router-dom';
 
 class AddToStore extends Component {
     constructor(props){
@@ -125,6 +126,19 @@ class AddToStore extends Component {
 
 
     render() {
+        if (localStorage.getItem('role')==="customer") {
+            return(
+                <Redirect to='/home'/>
+            );
+        }else if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         console.log(this.state.loading);
         if (this.state.loading) {
             return(

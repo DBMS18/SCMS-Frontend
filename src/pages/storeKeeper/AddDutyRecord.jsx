@@ -145,6 +145,20 @@ class AddDutyRecord extends Component {
 
     render() {
 
+        if (localStorage.getItem('role')==="customer") {
+            return(
+                <Redirect to='/home'/>
+            );
+        }else if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
+
         if (this.state.finished) {
             return(
                 <Redirect to={{

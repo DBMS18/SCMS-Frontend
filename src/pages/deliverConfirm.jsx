@@ -3,28 +3,20 @@ import axios from 'axios';
 import { Box,Center, Heading,Spinner} from "@chakra-ui/react"
 
 import Order from '../components/DutyOrder'
-import { Redirect } from 'react-router-dom';
+
 
 
 class StoreOrders extends Component{
     constructor(props){
         super(props);
         this.state = {
-            DutyOrders: [],
+            DutyOrders: {},
             loading:true
         }
     }
 
     async componentDidMount() {
-        const token = localStorage.getItem('token');
-        console.log(token);
-        let data = {
-            headers: {
-                'Access-Control-Allow-Headers': 'x-Auth-token',
-                'x-Auth-token': token
-            }
-        }
-            await axios.get(`http://localhost:5000/api/assistant/get-orders`, Object.assign({}, {}, data))
+            await axios.get(`http://localhost:5000/`, null)
             .then(data => {
                 if (data.data.err===0) {
                     this.setState({
@@ -51,16 +43,7 @@ class StoreOrders extends Component{
                 ...this.state,
                 loading:true
             });
-
-            const token = localStorage.getItem('token');
-        console.log(token);
-        let data = {
-            headers: {
-                'Access-Control-Allow-Headers': 'x-Auth-token',
-                'x-Auth-token': token
-            }
-        }
-                await axios.post(`http://localhost:5000/api/assistant/${order_id}`, data)
+                await axios.put(`http://localhost:5000/`, null)
                 .then(data => {
                     if (data.data.err===0) {
                         alert(data.data.msg);
@@ -84,20 +67,7 @@ class StoreOrders extends Component{
               }
 
     render(){
-        if (localStorage.getItem('role')==="customer") {
-            return(
-                <Redirect to='/home'/>
-            );
-        }else if (localStorage.getItem('role')==="manager") {
-            return(
-                <Redirect to='/manager'/>
-            );
-        }else if (localStorage.getItem('role')==="store_keeper") {
-            return(
-                <Redirect to='/storekeeper'/>
-            );
-        }
-        
+
         if (this.state.loading) {
             return(
                 <Center>

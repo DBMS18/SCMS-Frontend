@@ -35,7 +35,19 @@ class Cart extends Component{
     }
 
     render(){
-
+        if (localStorage.getItem('role')==="manager") {
+            return(
+                <Redirect to='/manager'/>
+            );
+        }else if (localStorage.getItem('role')==="store_keeper") {
+            return(
+                <Redirect to='/storekeeper'/>
+            );
+        }else if (localStorage.getItem('role')==="driver_assistant") {
+            return(
+                <Redirect to='/driverassistant'/>
+            );
+        }
         if (this.state.checkout) {
             var total = 0.00;
             const productsList = this.props.products.map((product, i) => {
