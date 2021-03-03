@@ -8,12 +8,12 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './store/actions/auth';
-
+import axios from 'axios';
 
 
 class App extends Component {
 
-  componentDidMount () {
+ componentDidMount () {
     this.props.onTryAutoSignup();
   }
   

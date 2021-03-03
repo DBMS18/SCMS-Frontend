@@ -1,30 +1,56 @@
 import React, { Component } from 'react';
-import { Box, Center, Spinner, Text} from "@chakra-ui/react"
+import { Box, Center, Spinner, Text, Button} from "@chakra-ui/react"
 
 import Product from '../components/Product';
 import axios from 'axios';
 
 //import * as actions from '../store/actions/auth';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 class Cart extends Component{
     constructor(props){
         super(props);
         this.state = {
             products: {},
-            loading: true
+            loading: true,
+            checkout: false,
         }
     }
     
     async componentDidMount() {
         this.setState({
             ...this.state,
-            loading: false
+            loading: false,
+            products: this.props.products
         })
     }
     
+    checkOut(){
+        console.log("object")
+        this.setState({
+            ...this.state,
+            checkout:true
+        })
+    }
 
     render(){
+
+        if (this.state.checkout) {
+            var total = 0.00;
+            const productsList = this.props.products.map((product, i) => {
+                total = total + product.price * product.selected;
+                return (
+                    <Product key={i} product={product} page={this.props.page}/>
+                );
+            });
+            return(
+                <Redirect to={{
+                    pathname: "/checkout",
+                    state: { products: this.props.products, total:total }
+                  }}/>
+            )
+        }
         
         if (this.state.loading) {
             return(
@@ -50,17 +76,31 @@ class Cart extends Component{
                     </div>
                 );
             }else{
+                var total = 0.00;
                 const productsList = this.props.products.map((product, i) => {
+                    total = total + product.price * product.selected;
                     return (
                         <Product key={i} product={product} page={this.props.page}/>
                     );
                 });
+                console.log(total)
                 return(
                     <div>
                         <Center>
-                            <Box width="75%" m={5} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
+                            <Box width="60%" m={5} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
                                 {productsList}
                             </Box> 
+                            <Box width="20%" m={5} borderWidth={1} borderColor="gray.300" p={5} borderRadius="lg">
+                                <Center>
+                                    <Button mb="5" onClick={this.checkOut.bind(this)} colorScheme="teal" variant="solid">
+                                        Go to checkout
+                                    </Button>
+                                </Center>
+                                <Center>
+                                    Sub Total :      Rs. {total}
+                                </Center>
+                                
+                            </Box>
                         </Center> 
                     </div>
                 );

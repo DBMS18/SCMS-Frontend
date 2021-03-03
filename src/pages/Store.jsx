@@ -121,20 +121,19 @@ class Store extends Component{
     }
 
     addItemToCart(selectedProduct){
-        console.log(selectedProduct)
         var added = false;
         var productsList = this.props.products.map((product, i) => {
             if (product.product_id===selectedProduct.product_id) {
-                product.selected= selectedProduct.selected
+                product.selected= product.selected+selectedProduct.selected
                 added = true
             }
+            return product;
         });
         if (!added) {
             productsList = [selectedProduct, ...productsList]
         }
-        console.log("new list "+productsList);
+        added = false;
         this.props.addItemToCart(productsList);
-        console.log("asf"+this.props.products)
     }
     
 
@@ -155,7 +154,7 @@ class Store extends Component{
         }else{
             const productsList = this.state.products.map((product, i) => {
                 return (
-                    <Product key={i} product={product} addItemToCart={this.addItemToCart.bind(this)} page={this.props.page}/>
+                    <Product key={i} product={product} addItemToCart={this.addItemToCart.bind(this)} page={this.props.page}  />
                 );
             });
             return(

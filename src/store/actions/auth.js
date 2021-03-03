@@ -30,9 +30,9 @@ export const authCheckState = () => {
         if (!token) {
             dispatch(logout());
         } else {
-            const userId = localStorage.getItem('userId');
+            const userId = localStorage.getItem('user');
             const role = localStorage.getItem('role');
-            dispatch(authSuccess(token, userId, role));
+            dispatch(authSuccess(token, userId,role));
             }   
         };
 };
