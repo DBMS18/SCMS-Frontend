@@ -7,7 +7,7 @@ import Signin from './Signin';
 import Store from './Store';
 import Contact from './Contact';
 import Signout from './Signout';
-import Manager from './Manager';
+import Manager from './AssignGoods';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import StoreKeeper from './storeKeeper/StoreKeeper';
